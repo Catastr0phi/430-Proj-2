@@ -42,7 +42,27 @@ const getLevels = async (req, res) => {
     }
 };
 
+const updateTime = async (req, res) => {
+    if (!req.body.time){
+        return res.status(400).json({error: 'Time requried!'});
+    }
+    try {
+        const query = {owner: req.session.account._id, name: req.body.name};
+        const update = {time: req.body.time};
+
+        await Level.findOneAndUpdate(query, update);
+
+        // findOneAndUpdate returns the data BEFORE the update, so doc must be gotten seperately after
+        const doc = Level.findOne(query);
+        return res.status(201).json({name: doc.name, id: doc.id, time: doc.time});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'Error updating time!'});
+    }
+}
+
 module.exports = {
     makeLevel,
     getLevels,
+    updateTime,
 }
