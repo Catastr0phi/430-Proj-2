@@ -1,5 +1,6 @@
 const models = require('../models');
 const Account = models.Account;
+const Level = require('./Level.js');
 
 const loginPage = (req, res) => {
     return res.render('login');
@@ -51,6 +52,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({username, password: hash});
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
+        Level.createAllBaseLevels(req, res);
         return res.json({redirect: '/tracker'});
     } catch (err) {
         console.log(err);
