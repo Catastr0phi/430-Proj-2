@@ -84,6 +84,8 @@ const createBaseLevel = async (name, id, req, res) => {
     } catch (err) {
         console.log(err);
     }
+
+    return res.status(200);
 }
 
 // Calls above function for every official level in the game
