@@ -34,6 +34,32 @@ const login = (req, res) => {
     })
 }
 
+const changePass = async (req, res) => {
+    const username = `${req.body.username}`;
+    const oldPass = `${req.body.oldPass}`;
+    const pass = `${req.body.pass}`;
+    const pass2 = `${req.body.pass2}`;
+
+    if (!username || !oldPass || !pass || !pass2){
+        return res.status(400).json({error: 'All fields are required!'});
+    }
+
+    if (pass !== pass2){
+        return res.status(400).json({error: 'Passwords do not match!'});
+    }
+
+    return Account.authenticate(username, oldPass, (err, account) => {
+        if (err || !account) {
+            return res.status(401).json({error: 'Wrong username or password!'})
+        }
+
+        const hash = await Account.generateHash(pass);
+
+        await Account.findOneAndUpdate({username: username}, {password: hash});
+        return res.status(201)
+    })
+}
+
 const signup = async (req, res) => {
     const username = `${req.body.username}`;
     const pass = `${req.body.pass}`;
@@ -52,7 +78,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({username, password: hash});
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        Level.createAllBaseLevels(req, res);
+        await Level.createAllBaseLevels(req, res);
         return res.json({redirect: '/tracker'});
     } catch (err) {
         console.log(err);
