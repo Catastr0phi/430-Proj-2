@@ -10,6 +10,10 @@ const signupPage = (req, res) => {
     return res.render('signup');
 }
 
+const accountPage = (req, res) => {
+    return res.render('account');
+}
+
 const logout = (req, res) => {
     req.session.destroy();
     return res.redirect('/');
@@ -48,16 +52,16 @@ const changePass = async (req, res) => {
         return res.status(400).json({error: 'Passwords do not match!'});
     }
 
-    return Account.authenticate(username, oldPass, (err, account) => {
+    Account.authenticate(username, oldPass, (err, account) => {
         if (err || !account) {
             return res.status(401).json({error: 'Wrong username or password!'})
         }
-
-        const hash = await Account.generateHash(pass);
-
-        await Account.findOneAndUpdate({username: username}, {password: hash});
-        return res.status(201)
     })
+
+    const hash = await Account.generateHash(pass);
+
+    await Account.findOneAndUpdate({username: username}, {password: hash});
+    return res.status(201)
 }
 
 const signup = async (req, res) => {
@@ -93,7 +97,9 @@ const signup = async (req, res) => {
 module.exports = {
     loginPage,
     signupPage,
+    accountPage,
     login,
     logout,
     signup,
+    changePass,
 }
