@@ -84,7 +84,6 @@ const LevelList = (props) => {
     const levelNodes = levels.map(level => {
         return (
             <div key={level.id} className='level'>
-                <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
                 <h3 className='levelName'>Name: {level.name}</h3>
                 <h3 className='levelID'>ID: {level.id}</h3>
                 <form id='timeForm'
@@ -97,7 +96,12 @@ const LevelList = (props) => {
                     <input id="levelTime" type='number' name='time' placeholder='Update time' />
                     <input className='newTimeSubmit' type='submit' value='Update' />    
                 </form>
-                <h3 className='levelTime'>Time: {level.time}</h3>
+                <h3 className='levelTime'>{level.time ? (
+                    `Time: ${level.time}`
+                ) : (
+                    'No time recorded!'
+                )
+                }</h3>
             </div>
         );
     });
