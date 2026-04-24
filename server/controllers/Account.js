@@ -39,7 +39,7 @@ const login = (req, res) => {
 }
 
 const changePass = async (req, res) => {
-    const username = `${req.body.username}`;
+    const username = `${req.session.account.username}`;
     const oldPass = `${req.body.oldPass}`;
     const pass = `${req.body.pass}`;
     const pass2 = `${req.body.pass2}`;
@@ -62,6 +62,20 @@ const changePass = async (req, res) => {
 
     await Account.findOneAndUpdate({username: username}, {password: hash});
     return res.status(201)
+}
+
+const goPremium = async (req, res) => {
+    try {
+        const query = {username: req.session.account.username};
+        const update = {premium: true};
+
+        await Account.findOneAndUpdate(query, update);
+
+        return res.status(201);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'Error activating premium!'});
+    }
 }
 
 const signup = async (req, res) => {
@@ -102,4 +116,5 @@ module.exports = {
     logout,
     signup,
     changePass,
+    goPremium
 }

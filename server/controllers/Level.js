@@ -83,6 +83,7 @@ const createBaseLevel = async (name, id, req, res) => {
         await newLevel.save();
     } catch (err) {
         console.log(err);
+        return res.status(500);
     }
 
     return res.status(200);
