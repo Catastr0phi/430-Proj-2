@@ -10,6 +10,7 @@ const router = (app) => {
     app.get('/account', mid.requiresLogin, controllers.Account.accountPage)
     app.post('/changePass', mid.requiresLogin, controllers.Account.changePass)
     app.post('/goPremium', mid.requiresLogin, controllers.Account.goPremium)
+    app.get('/getPremiumStatus', mid.requiresLogin, controllers.Account.getPremiumStatus)
 
     app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 

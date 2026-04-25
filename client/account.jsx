@@ -28,7 +28,7 @@ const handlePremium = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    helper.sendPost(e.target.action, {});
+    helper.sendPost('/goPremium', {});
     return false;
 }
 
@@ -57,7 +57,7 @@ const PasswordChange = (props) => {
 
 const PremiumUpgrade = (props) => {
     return (
-        <button onClick={handlePremium} action="/goPremium">Go Premium</button>
+        <button onClick={handlePremium} action='/goPremium'>Go Premium</button>
     )
 }
 

@@ -78,6 +78,19 @@ const goPremium = async (req, res) => {
     }
 }
 
+const getPremiumStatus = async (req, res) => {
+    try {
+        const query = {username: req.session.account.username};
+
+        const doc = await Account.findOne(query);
+
+        return res.status(201).json({premium: doc.premium});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'Error getting account data!'});
+    }
+}
+
 const signup = async (req, res) => {
     const username = `${req.body.username}`;
     const pass = `${req.body.pass}`;
@@ -116,5 +129,6 @@ module.exports = {
     logout,
     signup,
     changePass,
-    goPremium
+    goPremium,
+    getPremiumStatus
 }

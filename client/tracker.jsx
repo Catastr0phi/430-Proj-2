@@ -113,13 +113,26 @@ const LevelList = (props) => {
     );
 };
 
-const App = () => {
+const App = (props) => {
     const [reloadLevels, setReloadLevels] = useState(false);
+    const [premium, setPremium] = useState(props.premium);
+
+    useEffect(() => {
+        const getPremiumStatus = async () => {
+            const response = await fetch('/getPremiumStatus');
+            const data = await response.json();
+            setPremium(data.premium);
+        };
+        getPremiumStatus();
+    }, [props.reloadLevels]);
 
     return (
         <div>
-            <div id='makeLevel'>
+            <div id='makeLevel'>{premium ? (
                 <LevelForm triggerReload={() => setReloadLevels(!reloadLevels)} />
+            ) : (
+                'Activate premium to add custom levels!'
+            )}
             </div>
             <div id='levels'>
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} />
