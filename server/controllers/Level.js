@@ -15,7 +15,7 @@ const makeLevel = async (req, res) => {
     const levelData = {
         name: req.body.name,
         id: req.body.id,
-        costum: req.body.costum,
+        category: 'CUSTOM',
         owner: req.session.account._id,
     };
 
@@ -40,7 +40,19 @@ const makeLevel = async (req, res) => {
 const getLevels = async (req, res) => {
     try {
         const query = {owner: req.session.account._id};
-        const docs = await Level.find(query).select('name id custom time').lean().exec();
+        const docs = await Level.find(query).select('name id category time').lean().exec();
+
+        return res.json({levels: docs});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: 'Error retrieving levels!'});
+    }
+};
+
+const getLevelsOfCategory = async (req, res) => {
+    try {
+        const query = {owner: req.session.account._id, category: req.query.category};
+        const docs = await Level.find(query).select('name id category time').lean().exec();
 
         return res.json({levels: docs});
     } catch (err) {
@@ -70,11 +82,11 @@ const updateTime = async (req, res) => {
 
 // Creates a level using just a manually given name and an ID
 // Used for base levels, as custom request bodies are not needed besides account info
-const createBaseLevel = async (name, id, req, res) => {
+const createBaseLevel = async (name, id, category, req, res) => {
     const levelData = {
         name: name,
         id: id,
-        costum: false,
+        category: category,
         owner: req.session.account._id,
     }
 
@@ -93,69 +105,69 @@ const createBaseLevel = async (name, id, req, res) => {
 const createAllBaseLevels = async (req, res) => {
 
     // PRELUDE
-    await createBaseLevel('INTO THE FIRE', '0-1', req, res);
-    await createBaseLevel('THE MEATGRINDER', '0-2', req, res);
-    await createBaseLevel('DOUBLE DOWN', '0-3', req, res);
-    await createBaseLevel('A ONE-MACHNE ARMY', '0-4', req, res);
-    await createBaseLevel('CERBERUS', '0-5', req, res);
-    await createBaseLevel('SOMETHING WICKED', '0-S', req, res);
+    await createBaseLevel('INTO THE FIRE', '0-1', 'PRELUDE', req, res);
+    await createBaseLevel('THE MEATGRINDER', '0-2', 'PRELUDE', req, res);
+    await createBaseLevel('DOUBLE DOWN', '0-3', 'PRELUDE',req, res);
+    await createBaseLevel('A ONE-MACHNE ARMY', '0-4', 'PRELUDE',req, res);
+    await createBaseLevel('CERBERUS', '0-5', 'PRELUDE',req, res);
+    await createBaseLevel('SOMETHING WICKED', '0-S', 'PRELUDE',req, res);
 
     // LIMBO
-    await createBaseLevel('HEART OF THE SUNRISE', '1-1', req, res);
-    await createBaseLevel('THE BURNING WORLD', '1-2', req, res);
-    await createBaseLevel('HALLS OF SACRED REMAINS', '1-3', req, res);
-    await createBaseLevel('CLAIR DE LUNE', '1-4', req, res);
-    await createBaseLevel('THE WITLESS', '1-S', req, res);
+    await createBaseLevel('HEART OF THE SUNRISE', '1-1', 'LIMBO', req, res);
+    await createBaseLevel('THE BURNING WORLD', '1-2', 'LIMBO', req, res);
+    await createBaseLevel('HALLS OF SACRED REMAINS', '1-3', 'LIMBO', req, res);
+    await createBaseLevel('CLAIR DE LUNE', '1-4', 'LIMBO', req, res);
+    await createBaseLevel('THE WITLESS', '1-S', 'LIMBO', req, res);
 
     // LUST
-    await createBaseLevel('BRIDGEBURNER', '2-1', req, res);
-    await createBaseLevel('DEATH AT 20,000 VOLTS', '2-2', req, res);
-    await createBaseLevel('SHEER HEART ATTACK', '2-3', req, res);
-    await createBaseLevel('COURT OF THE CORPSE KING', '2-4', req, res);
-    await createBaseLevel('ALL-IMPERFECT LOVE SONG', '2-S', req, res);
+    await createBaseLevel('BRIDGEBURNER', '2-1', 'LUST', req, res);
+    await createBaseLevel('DEATH AT 20,000 VOLTS', '2-2', 'LUST', req, res);
+    await createBaseLevel('SHEER HEART ATTACK', '2-3', 'LUST', req, res);
+    await createBaseLevel('COURT OF THE CORPSE KING', '2-4', 'LUST', req, res);
+    await createBaseLevel('ALL-IMPERFECT LOVE SONG', '2-S', 'LUST', req, res);
 
     // GLUTTONY
-    await createBaseLevel('BELLY OF THE BEAST', '3-1', req, res);
-    await createBaseLevel('IN THE FLESH', '3-2', req, res);
+    await createBaseLevel('BELLY OF THE BEAST', '3-1', 'GLUTTONY', req, res);
+    await createBaseLevel('IN THE FLESH', '3-2', 'GLUTTONY', req, res);
 
     // GREED
-    await createBaseLevel('SLAVES TO POWER', '4-1', req, res);
-    await createBaseLevel('GOD DAMN THE SUN', '4-2', req, res);
-    await createBaseLevel('A SHOT IN THE DARK', '4-3', req, res);
-    await createBaseLevel('CLAIR DE SOLEIL', '4-4', req, res);
-    await createBaseLevel('CLASH OF THE BRANDICOOT', '4-S', req, res);
+    await createBaseLevel('SLAVES TO POWER', '4-1', 'GREED', req, res);
+    await createBaseLevel('GOD DAMN THE SUN', '4-2', 'GREED', req, res);
+    await createBaseLevel('A SHOT IN THE DARK', '4-3', 'GREED', req, res);
+    await createBaseLevel('CLAIR DE SOLEIL', '4-4', 'GREED', req, res);
+    await createBaseLevel('CLASH OF THE BRANDICOOT', '4-S', 'GREED', req, res);
 
     // WRATH
-    await createBaseLevel('IN THE WAKE OF POSEIDON', '5-1', req, res);
-    await createBaseLevel('WAVES OF THE STARLESS SEA', '5-2', req, res);
-    await createBaseLevel('SHIP OF FOOLS', '5-3', req, res);
-    await createBaseLevel('LEVIATHAN', '5-4', req, res);
-    await createBaseLevel('I ONLY SAY MORNING', '5-S', req, res);
+    await createBaseLevel('IN THE WAKE OF POSEIDON', '5-1', 'WRATH', req, res);
+    await createBaseLevel('WAVES OF THE STARLESS SEA', '5-2', 'WRATH', req, res);
+    await createBaseLevel('SHIP OF FOOLS', '5-3', 'WRATH', req, res);
+    await createBaseLevel('LEVIATHAN', '5-4', 'WRATH', req, res);
+    await createBaseLevel('I ONLY SAY MORNING', '5-S', 'WRATH', req, res);
 
     // HERESY
-    await createBaseLevel('CRY FOR THE WEEPER', '6-1', req, res);
-    await createBaseLevel('AESTHETICS OF HATE', '6-2', req, res);
+    await createBaseLevel('CRY FOR THE WEEPER', '6-1', 'HERESY', req, res);
+    await createBaseLevel('AESTHETICS OF HATE', '6-2', 'HERESY', req, res);
 
     // VIOLENCE
-    await createBaseLevel('GARDEN OF FORKING PATHS', '7-1', req, res);
-    await createBaseLevel('LIGHT UP THE NIGHT', '7-2', req, res);
-    await createBaseLevel('NO SOUND, NO MEMORY',  '7-3', req, res);
-    await createBaseLevel('...LIKE ANTENNAS TO HEAVEN', '7-4', req, res);
-    await createBaseLevel('HELL BATH NO FURY', '7-S', req, res);
+    await createBaseLevel('GARDEN OF FORKING PATHS', '7-1', 'VIOLENCE', req, res);
+    await createBaseLevel('LIGHT UP THE NIGHT', '7-2', 'VIOLENCE', req, res);
+    await createBaseLevel('NO SOUND, NO MEMORY',  '7-3', 'VIOLENCE', req, res);
+    await createBaseLevel('...LIKE ANTENNAS TO HEAVEN', '7-4', 'VIOLENCE', req, res);
+    await createBaseLevel('HELL BATH NO FURY', '7-S', 'VIOLENCE', req, res);
 
     // FRAUD
-    await createBaseLevel('HURTBREAK WONDERLAND', '8-1', req, res);
-    await createBaseLevel('THROUGH THE MIRROR', '8-2', req, res);
-    await createBaseLevel('DISINTEGRATION LOOP', '8-3', req, res);
-    await createBaseLevel('FINAL FLIGHT', '8-4', req, res);
+    await createBaseLevel('HURTBREAK WONDERLAND', '8-1', 'FRAUD', req, res);
+    await createBaseLevel('THROUGH THE MIRROR', '8-2', 'FRAUD', req, res);
+    await createBaseLevel('DISINTEGRATION LOOP', '8-3', 'FRAUD', req, res);
+    await createBaseLevel('FINAL FLIGHT', '8-4', 'FRAUD', req, res);
     
     // ENCORES
-    await createBaseLevel('THIS HEAT, AN EVIL HEAT', '0-E', req, res);
-    await createBaseLevel('...THEN FELL THE ASHES', '1-E', req, res);
+    await createBaseLevel('THIS HEAT, AN EVIL HEAT', '0-E', 'ENCORES', req, res);
+    await createBaseLevel('...THEN FELL THE ASHES', '1-E', 'ENCORES', req, res);
 
     // PRIME SANCTUMS
-    await createBaseLevel('SOUL SURVIVOR', 'P-1', req, res);
-    await createBaseLevel('WAIT OF THE WORLD', 'P-2', req, res);
+    await createBaseLevel('SOUL SURVIVOR', 'P-1', 'PRIME SANCTUMS', req, res);
+    await createBaseLevel('WAIT OF THE WORLD', 'P-2', 'PRIME SANCTUMS', req, res);
 }
 
 
@@ -163,6 +175,7 @@ module.exports = {
     trackerPage,
     makeLevel,
     getLevels,
+    getLevelsOfCategory,
     updateTime,
     createAllBaseLevels,
 }

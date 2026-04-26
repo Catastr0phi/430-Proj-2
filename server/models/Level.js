@@ -12,10 +12,10 @@ const LevelSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    custom: {
-        type: Boolean,
+    category: {
+        type: String,
         required: true,
-        default: false,
+        trim: true,
     },
     time: {
         type: Number,
@@ -35,7 +35,7 @@ const LevelSchema = new mongoose.Schema({
 LevelSchema.statics.toAPI = (doc) => ({
     name: doc.name,
     id: doc.id,
-    custom: doc.custom,
+    category: doc.category,
     time: doc.time,
 });
 

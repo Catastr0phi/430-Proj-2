@@ -3,6 +3,7 @@ const mid = require('./middleware');
 
 const router = (app) => {
     app.get('/getLevels', mid.requiresLogin, controllers.Level.getLevels);
+    app.get('/getLevelsOfCategory', mid.requiresLogin, controllers.Level.getLevelsOfCategory)
 
     app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
     app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

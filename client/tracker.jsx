@@ -66,7 +66,7 @@ const LevelList = (props) => {
 
     useEffect(() => {
         const loadLevelsFromServer = async () => {
-            const response = await fetch('/getLevels');
+            const response = await fetch(`/getLevelsOfCategory?${new URLSearchParams({category: props.category})}`);
             const data = await response.json();
             setLevels(data.levels);
         };
@@ -109,6 +109,7 @@ const LevelList = (props) => {
 
     return (
         <div className='levelList'>
+            <h1 className='categoryTitle'>{props.category}</h1>
             {levelNodes}
         </div>
     );
@@ -136,7 +137,18 @@ const App = (props) => {
             )}
             </div>
             <div id='levels'>
-                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='PRELUDE' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='LIMBO' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='LUST' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='GLUTTONY' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='GREED' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='WRATH' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='HERESY' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='VIOLENCE' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='FRAUD' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='ENCORES' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='PRIME SANCTUMS' />
+                <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='CUSTOM' />
             </div>
         </div>
     );
