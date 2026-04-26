@@ -54,7 +54,7 @@ const LevelForm = (props) => {
             <input id='levelName' type='text' name='name' placeholder='Level Name' />
             <label htmlFor="id">ID: </label>
             <input id='levelID' type='text' name='id' placeholder='Level ID' />
-            <label htmlFor='time'>Time: </label>
+            <label htmlFor='time'>Time in seconds: </label>
             <input id="levelTime" type='number' min='0' name='time' />
             <input className='addLevelSubmit' type='submit' value='Add Level' />            
         </form>
@@ -93,11 +93,12 @@ const LevelList = (props) => {
                 method='POST'
                 className='timeForm'
                 >
+                    <label htmlFor='time'>Time in seconds: </label>
                     <input id="levelTime" type='number' name='time' placeholder='Update time' />
                     <input className='newTimeSubmit' type='submit' value='Update' />    
                 </form>
                 <h3 className='levelTime'>{level.time ? (
-                    `Time: ${level.time}`
+                    'Time: ' + (Math.floor(level.time/60)).toString().padStart(2, '0') + ':' + (level.time%60).toString().padStart(2, '0')
                 ) : (
                     'No time recorded!'
                 )

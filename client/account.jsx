@@ -1,6 +1,7 @@
 const helper = require('./helper.js');
 const React = require('react');
 const {createRoot} = require('react-dom/client');
+const { useState, useEffect } = React;
 
 const handlePasswordChange = (e) => {
     e.preventDefault();
@@ -56,8 +57,23 @@ const PasswordChange = (props) => {
 }
 
 const PremiumUpgrade = (props) => {
+    const [premium, setPremium] = useState(props.premium);
+
+    useEffect(() => {
+        const getPremiumStatus = async () => {
+            const response = await fetch('/getPremiumStatus');
+            const data = await response.json();
+            setPremium(data.premium);
+        };
+        getPremiumStatus();
+    });
+
     return (
-        <button onClick={handlePremium} action='/goPremium'>Go Premium</button>
+        <div id='premiumForm'>{premium ? (
+            <h3>Account is premium!</h3>
+        ) : <div><h3>Account is not premium!</h3>
+        <button onClick={handlePremium} action='/goPremium'>Go Premium</button></div> }
+        </div>
     )
 }
 
