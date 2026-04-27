@@ -73,14 +73,6 @@ const LevelList = (props) => {
         loadLevelsFromServer();
     }, [props.reloadLevels]);
 
-    if (levels.length === 0){
-        return (
-            <div className='levelList'>
-                <h3 className='emptyLevel'>No Levels Added!</h3>
-            </div>
-        );
-    }
-
     const levelNodes = levels.map(level => {
         return (
             <div key={level.id} className='level'>
@@ -110,7 +102,11 @@ const LevelList = (props) => {
     return (
         <div className='levelList'>
             <h1 className='categoryTitle'>{props.category}</h1>
-            {levelNodes}
+            {levels.length === 0 ? (
+            <h3 className='emptyLevel'>No Levels Added!</h3>
+        ) : (
+            levelNodes
+        )}
         </div>
     );
 };

@@ -72,7 +72,7 @@ const PremiumUpgrade = (props) => {
         <div id='premiumForm'>{premium ? (
             <h3>Account is premium!</h3>
         ) : <div><h3>Account is not premium!</h3>
-        <button onClick={handlePremium} action='/goPremium'>Go Premium</button></div> }
+        <button onClick={handlePremium} action='/goPremium' className='formSubmit'>Go Premium</button></div> }
         </div>
     )
 }

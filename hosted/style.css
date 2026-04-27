@@ -90,6 +90,14 @@ nav:nth-child(1) {
     font-size: 1.2em;
 }
 
+#premiumForm {
+    height: 100px;
+    width: 300px;
+    margin: 0 auto;
+    padding-top: 50px;
+    font-size: 1.2em;
+}
+
 .mainForm h3 {
     text-align: center;
 }
@@ -161,7 +169,7 @@ nav:nth-child(1) {
 
 .levelList {
     display: grid;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 100px 1fr;
     grid-template-columns: repeat(auto-fill,1fr);
     border-color: white;
     border-width: 2px;
@@ -173,6 +181,8 @@ nav:nth-child(1) {
 .categoryTitle {
     grid-row-start: 1;
     grid-row-end: 1;
+    text-align: left;
+    padding-left: 20px;
 }
 
 .level {
@@ -185,4 +195,6 @@ nav:nth-child(1) {
     border-width: 1px;
     border-style: solid;
     border-radius: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
