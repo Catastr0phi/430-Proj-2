@@ -7,10 +7,10 @@ const router = (app) => {
 
     app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
     app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
-    app.get('/account', mid.requiresLogin, controllers.Account.accountPage)
-    app.post('/changePass', mid.requiresLogin, controllers.Account.changePass)
-    app.post('/goPremium', mid.requiresLogin, controllers.Account.goPremium)
-    app.get('/getPremiumStatus', mid.requiresLogin, controllers.Account.getPremiumStatus)
+    app.get('/account', mid.requiresSecure, mid.requiresLogin, controllers.Account.accountPage)
+    app.post('/changePass',mid.requiresSecure, mid.requiresLogin, controllers.Account.changePass)
+    app.post('/goPremium', mid.requiresSecure, mid.requiresLogin, controllers.Account.goPremium)
+    app.get('/getPremiumStatus', mid.requiresSecure, mid.requiresLogin, controllers.Account.getPremiumStatus)
 
     app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
