@@ -167,6 +167,13 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
+#successMessage {
+    font-size: 1.2em;
+    font-weight: normal;
+    color: green;
+    font-style: italic;
+}
+
 .levelList {
     display: grid;
     grid-template-rows: 100px 1fr;

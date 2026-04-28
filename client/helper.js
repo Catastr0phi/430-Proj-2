@@ -7,6 +7,12 @@ const handleError = (message) => {
   document.getElementById('errorMessage').classList.remove('hidden');
 };
 
+// For successful messages
+// Used to give some sort of feedback for password changing
+const handleSuccessMessage = (message) => {
+  document.getElementById('successMessage').textContent = message;
+}
+
 /* Sends post requests to the server using fetch. Will look for various
    entries in the response JSON object, and will handle them appropriately.
 */
@@ -28,6 +34,10 @@ const sendPost = async (url, data, handler) => {
 
   if(result.error) {
     handleError(result.error);
+  }
+
+  if(result.message) {
+    handleSuccessMessage(result.message)
   }
 
   if(handler){

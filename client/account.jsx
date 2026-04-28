@@ -25,15 +25,17 @@ const handlePasswordChange = (e) => {
     return false;
 }
 
-const handlePremium = (e) => {
+const handlePremium = (e, onUpdated) => {
     e.preventDefault();
     helper.hideError();
 
-    helper.sendPost('/goPremium', {});
+    helper.sendPost('/goPremium', {}, onUpdated);
     return false;
 }
 
-const PasswordChange = (props) => {
+const AccountForm = (props) => {
+    const [reloadPage, setReloadPage] = useState(false);
+
     return (
         <div>
         <form id="passwordChangeForm"
@@ -51,7 +53,7 @@ const PasswordChange = (props) => {
             <input id="pass2" type='password' name='pass2' placeholder='retype new password' />
             <input className='formSubmit' type='submit' value='Change password' />
         </form>
-        <PremiumUpgrade></PremiumUpgrade>
+        <PremiumUpgrade reloadPage={reloadPage} triggerReload={() => setReloadPage(!reloadPage)}></PremiumUpgrade>
         </div>
     );
 }
@@ -66,13 +68,13 @@ const PremiumUpgrade = (props) => {
             setPremium(data.premium);
         };
         getPremiumStatus();
-    });
+    }, [props.reloadPage]);
 
     return (
         <div id='premiumForm'>{premium ? (
             <h3>Account is premium!</h3>
         ) : <div><h3>Account is not premium!</h3>
-        <button onClick={handlePremium} action='/goPremium' className='formSubmit'>Go Premium</button></div> }
+        <button onClick={(e) => handlePremium(e, props.triggerReload)} action='/goPremium' className='formSubmit'>Go Premium</button></div> }
         </div>
     )
 }
@@ -80,8 +82,7 @@ const PremiumUpgrade = (props) => {
 const init = () => {
     const root = createRoot(document.getElementById('content'));
 
-    root.render(<PasswordChange />);
-    //root.render(<PremiumUpgrade />);
+    root.render(<AccountForm />);
 }
 
 window.onload = init;

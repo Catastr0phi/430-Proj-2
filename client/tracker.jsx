@@ -1,7 +1,7 @@
 const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
-const {createRoot} = require('react-dom/client');
+const { createRoot } = require('react-dom/client');
 
 // Handles users adding their own levels from the form
 const handleCustomLevelCreation = (e, onLevelAdded) => {
@@ -17,7 +17,7 @@ const handleCustomLevelCreation = (e, onLevelAdded) => {
         return false;
     }
 
-    let data = {name: name, id: id, custom: true};
+    let data = { name: name, id: id, custom: true };
 
     if (time) data.time = time;
 
@@ -37,18 +37,18 @@ const handleUpdate = (e, levelName, onLevelUpdated) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, time}, onLevelUpdated);
+    helper.sendPost(e.target.action, { name, time }, onLevelUpdated);
     return false;
 }
 
 const LevelForm = (props) => {
     return (
         <form id='levelForm'
-        onSubmit={(e) => handleCustomLevelCreation(e, props.triggerReload)}
-        name='levelForm'
-        action='/addLevel'
-        method='POST'
-        className='levelForm'
+            onSubmit={(e) => handleCustomLevelCreation(e, props.triggerReload)}
+            name='levelForm'
+            action='/addLevel'
+            method='POST'
+            className='levelForm'
         >
             <label htmlFor="name">Name: </label>
             <input id='levelName' type='text' name='name' placeholder='Level Name' />
@@ -56,7 +56,7 @@ const LevelForm = (props) => {
             <input id='levelID' type='text' name='id' placeholder='Level ID' />
             <label htmlFor='time'>Time in seconds: </label>
             <input id="levelTime" type='number' min='0' name='time' />
-            <input className='addLevelSubmit' type='submit' value='Add Level' />            
+            <input className='addLevelSubmit' type='submit' value='Add Level' />
         </form>
     )
 }
@@ -66,7 +66,7 @@ const LevelList = (props) => {
 
     useEffect(() => {
         const loadLevelsFromServer = async () => {
-            const response = await fetch(`/getLevelsOfCategory?${new URLSearchParams({category: props.category})}`);
+            const response = await fetch(`/getLevelsOfCategory?${new URLSearchParams({ category: props.category })}`);
             const data = await response.json();
             setLevels(data.levels);
         };
@@ -79,18 +79,18 @@ const LevelList = (props) => {
                 <h3 className='levelName'>Name: {level.name}</h3>
                 <h3 className='levelID'>ID: {level.id}</h3>
                 <form id='timeForm'
-                onSubmit={(e) => handleUpdate(e, level.name, props.triggerReload)}
-                name='timeForm'
-                action='/updateTime'
-                method='POST'
-                className='timeForm'
+                    onSubmit={(e) => handleUpdate(e, level.name, props.triggerReload)}
+                    name='timeForm'
+                    action='/updateTime'
+                    method='POST'
+                    className='timeForm'
                 >
                     <label htmlFor='time'>Time in seconds: </label>
                     <input id="levelTime" type='number' name='time' placeholder='Update time' />
-                    <input className='newTimeSubmit' type='submit' value='Update' />    
+                    <input className='newTimeSubmit' type='submit' value='Update' />
                 </form>
                 <h3 className='levelTime'>{level.time ? (
-                    'Time: ' + (Math.floor(level.time/60)).toString().padStart(2, '0') + ':' + (level.time%60).toString().padStart(2, '0')
+                    'Time: ' + (Math.floor(level.time / 60)).toString().padStart(2, '0') + ':' + (level.time % 60).toString().padStart(2, '0')
                 ) : (
                     'No time recorded!'
                 )
@@ -103,10 +103,10 @@ const LevelList = (props) => {
         <div className='levelList'>
             <h1 className='categoryTitle'>{props.category}</h1>
             {levels.length === 0 ? (
-            <h3 className='emptyLevel'>No Levels Added!</h3>
-        ) : (
-            levelNodes
-        )}
+                <h3 className='emptyLevel'>No Levels Added!</h3>
+            ) : (
+                levelNodes
+            )}
         </div>
     );
 };
@@ -126,12 +126,6 @@ const App = (props) => {
 
     return (
         <div>
-            <div id='makeLevel'>{premium ? (
-                <LevelForm triggerReload={() => setReloadLevels(!reloadLevels)} />
-            ) : (
-                'Activate premium to add custom levels!'
-            )}
-            </div>
             <div id='levels'>
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='PRELUDE' />
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='LIMBO' />
@@ -144,6 +138,12 @@ const App = (props) => {
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='FRAUD' />
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='ENCORES' />
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='PRIME SANCTUMS' />
+                <div id='makeLevel'>{premium ? (
+                    <LevelForm triggerReload={() => setReloadLevels(!reloadLevels)} />
+                ) : (
+                    'Activate premium to add custom levels!'
+                )}
+                </div>
                 <LevelList levels={[]} reloadLevels={reloadLevels} triggerReload={() => setReloadLevels(!reloadLevels)} category='CUSTOM' />
             </div>
         </div>

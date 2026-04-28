@@ -61,7 +61,7 @@ const changePass = async (req, res) => {
     const hash = await Account.generateHash(pass);
 
     await Account.findOneAndUpdate({username: username}, {password: hash});
-    return res.status(201)
+    return res.status(201).json({message: 'Password updated successfully!'})
 }
 
 const goPremium = async (req, res) => {
@@ -71,7 +71,7 @@ const goPremium = async (req, res) => {
 
         await Account.findOneAndUpdate(query, update);
 
-        return res.status(201);
+        return res.status(201).json({premium: true});
     } catch (err) {
         console.log(err);
         return res.status(500).json({error: 'Error activating premium!'});
