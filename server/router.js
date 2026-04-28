@@ -22,6 +22,9 @@ const router = (app) => {
     app.post('/updateTime', mid.requiresLogin, controllers.Level.updateTime);
 
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+    // Nonexistent page redirection
+    app.get('/*splat', (req, res) => {res.render('notfound')});
 };
 
 module.exports = router;
