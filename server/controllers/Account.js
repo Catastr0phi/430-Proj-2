@@ -23,18 +23,18 @@ const login = (req, res) => {
     const username = `${req.body.username}`;
     const pass = `${req.body.pass}`;
 
-    if (!username || !pass){
-        return res.status(400).json({error: 'All fields are required!'});
+    if (!username || !pass) {
+        return res.status(400).json({ error: 'All fields are required!' });
     }
 
     return Account.authenticate(username, pass, (err, account) => {
         if (err || !account) {
-            return res.status(401).json({error: 'Wrong username or password!'});
+            return res.status(401).json({ error: 'Wrong username or password!' });
         }
 
         req.session.account = Account.toAPI(account);
 
-        return res.json({redirect: '/tracker'});
+        return res.json({ redirect: '/tracker' });
     })
 }
 
@@ -44,50 +44,50 @@ const changePass = async (req, res) => {
     const pass = `${req.body.pass}`;
     const pass2 = `${req.body.pass2}`;
 
-    if (!username || !oldPass || !pass || !pass2){
-        return res.status(400).json({error: 'All fields are required!'});
+    if (!username || !oldPass || !pass || !pass2) {
+        return res.status(400).json({ error: 'All fields are required!' });
     }
 
-    if (pass !== pass2){
-        return res.status(400).json({error: 'Passwords do not match!'});
+    if (pass !== pass2) {
+        return res.status(400).json({ error: 'Passwords do not match!' });
     }
 
-    Account.authenticate(username, oldPass, (err, account) => {
+    Account.authenticate(username, oldPass, async (err, account) => {
         if (err || !account) {
-            return res.status(401).json({error: 'Wrong username or password!'})
+            return res.status(401).json({ error: 'Wrong username or password!' })
         }
+
+        const hash = await Account.generateHash(pass);
+
+        await Account.findOneAndUpdate({ username: username }, { password: hash });
+        return res.status(201).json({ message: 'Password updated successfully!' })
     })
-
-    const hash = await Account.generateHash(pass);
-
-    await Account.findOneAndUpdate({username: username}, {password: hash});
-    return res.status(201).json({message: 'Password updated successfully!'})
 }
 
 const goPremium = async (req, res) => {
     try {
-        const query = {username: req.session.account.username};
-        const update = {premium: true};
+        const query = { username: req.session.account.username };
+        const update = { premium: true };
 
         await Account.findOneAndUpdate(query, update);
 
-        return res.status(201).json({premium: true});
+        return res.status(201).json({ premium: true });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({error: 'Error activating premium!'});
+        return res.status(500).json({ error: 'Error activating premium!' });
     }
 }
 
 const getPremiumStatus = async (req, res) => {
     try {
-        const query = {username: req.session.account.username};
+        const query = { username: req.session.account.username };
 
         const doc = await Account.findOne(query);
 
-        return res.status(201).json({premium: doc.premium});
+        return res.status(201).json({ premium: doc.premium });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({error: 'Error getting account data!'});
+        return res.status(500).json({ error: 'Error getting account data!' });
     }
 }
 
@@ -96,27 +96,27 @@ const signup = async (req, res) => {
     const pass = `${req.body.pass}`;
     const pass2 = `${req.body.pass2}`;
 
-    if (!username || !pass || !pass2){
-        return res.status(400).json({error: 'All fields are required!'});
+    if (!username || !pass || !pass2) {
+        return res.status(400).json({ error: 'All fields are required!' });
     }
 
-    if (pass !== pass2){
-        return res.status(400).json({error: 'Passwords do not match!'});
+    if (pass !== pass2) {
+        return res.status(400).json({ error: 'Passwords do not match!' });
     }
 
     try {
         const hash = await Account.generateHash(pass);
-        const newAccount = new Account({username, password: hash});
+        const newAccount = new Account({ username, password: hash });
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
         await Level.createAllBaseLevels(req, res);
-        return res.json({redirect: '/tracker'});
+        return res.json({ redirect: '/tracker' });
     } catch (err) {
         console.log(err);
-        if (err.code === 11000){
-            return res.status(400).json({error: 'Username already in use!'});
+        if (err.code === 11000) {
+            return res.status(400).json({ error: 'Username already in use!' });
         }
-        return res.status(400).json({error: 'An error occured!'});
+        return res.status(400).json({ error: 'An error occured!' });
     }
 }
 
